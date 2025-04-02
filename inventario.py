@@ -8,4 +8,5 @@ class Inventario(tk.Frame):
 
 
     def widgets(self):
-        pass
+        label = Label(self,text="Inventario")
+        label.pack()
