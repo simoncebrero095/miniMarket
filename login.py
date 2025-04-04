@@ -40,7 +40,7 @@ class Login(tk.Frame):
                         self.password.delete(0,'end')
                         messagebox.showerror(title="Error", message="Usuario y/o contraseña incorrecta")
             except sqlite3.Error as e:
-                messagebox.showerror(title="Error", message="no se conecto a la base de datos")
+                messagebox.showerror(title="Error", message="no se conecto a la base de datos: {}".format(e))
 
         else:
             messagebox.showerror(title="Error", message="Llene todas las casillas")
