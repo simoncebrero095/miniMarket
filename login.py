@@ -24,14 +24,16 @@ class Login(tk.Frame):
         pas = self.password.get()
 
         if self.validacion(user, pas):
-            consulta = "SELECT * FROM usuarios WHERE username = ? AND password = ?"
+            consulta = "SELECT * FROM usuarios WHERE username=? AND password = ?"
             parametros = (user, pas)
 
             try:
                 with sqlite3.connect(self.db_name) as conn:
                     cursor = conn.cursor()
                     cursor.execute(consulta, parametros)
-                    result = cursor.fetchall
+                    result = cursor.fetchall()
+                    print("Resultado del login:", result)
+
 
                     if result:
                         self.control1()
@@ -77,17 +79,12 @@ class Login(tk.Frame):
         pas.place(x=100,y=340)
         self.password = ttk.Entry(frame1, show="*", font="arial 16 bold")
         self.password.place(x=80,y=380, width=240, height=40)
-        
-        key = ttk.Label(frame1, text="Codigo de registro", font="arial 16 bold", background="#FFFFFF")
-        key.place(x=100, y=430)
-        self.key = ttk.Entry(frame1, show="*", font="arial 16 bold")
-        self.key.place(x=80,y=470, width=240, height=40)
-
-        btn1 = tk.Button(frame1, text="Iniciar", font="arial 16 bold", command=self.control1)
-        btn1.place(x=80, y=520 , width=240, height=40)
+    
+        btn1 = tk.Button(frame1, text="Iniciar", font="arial 16 bold", command=self.login)
+        btn1.place(x=80, y=440 , width=240, height=40)
         
         btn2 = tk.Button(frame1, text="Registrar", font="arial 16 bold", command=self.control2)
-        btn2.place(x=80, y=570 , width=240, height=40)
+        btn2.place(x=80, y=500 , width=240, height=40)
       
 
 class Registro(tk.Frame):
@@ -130,8 +127,8 @@ class Registro(tk.Frame):
         self.key = ttk.Entry(frame1, show="*", font="arial 16 bold")
         self.key.place(x=80,y=470, width=240, height=40)
 
-        btn1 = tk.Button(frame1, text="Registrarse", font="arial 16 bold")
-        btn1.place(x=80, y=520 , width=240, height=40)
+        btn3 = tk.Button(frame1, text="Registrarse", font="arial 16 bold")
+        btn3.place(x=80, y=520 , width=240, height=40)
         
-        btn2 = tk.Button(frame1, text="Regresar", font="arial 16 bold")
-        btn2.place(x=80, y=570 , width=240, height=40)
+        btn4 = tk.Button(frame1, text="Regresar", font="arial 16 bold")
+        btn4.place(x=80, y=570 , width=240, height=40)
