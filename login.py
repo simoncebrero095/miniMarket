@@ -88,6 +88,7 @@ class Login(tk.Frame):
       
 
 class Registro(tk.Frame):
+    db_name = "database.db"
 
     def __init__(self, padre, controlador):
         super().__init__(padre)
@@ -95,7 +96,47 @@ class Registro(tk.Frame):
         self.place(x=0, y=0 , width=1100 , height=650)
         self.controlador = controlador
         self.widgets()
+    
+    def validacion(self, user , pas):
+        return len(user) > 0 and len(pas) > 0
 
+    def eje_consulta(self, consulta, parametros=()):
+        try:
+            with sqlite3.connect(self.db_name) as conn:
+                cursor = conn.cursor()
+                cursor.execute(consulta, parametros)
+                conn.commit
+        except sqlite3.Error as e:
+            messagebox.showerror(title="Error", message="Error al ejecutar la consulta: {}".format(e))
+        
+        
+
+        
+    def registro(self):
+        user = self.username.get()
+        pas = self.password.get()
+        key = self.key.get()
+        if self.validacion(user,pas):
+            if len(pas) < 6:
+                messagebox.showinfo(title="Error", message="Contraseña desasiado corta")
+                self.username.delete(0,'end')
+                self.password.delete(0,'end')
+            else:
+                if key == "1234":
+                    consulta = "INSERT INTO usuarios VALUES (?,?,?)"
+                    parametros = (None, user, pas)
+                    self.eje_consulta(consulta,parametros)
+                    self.control1()
+                else:
+                    messagebox.showerror(title="Registro", message="Error al ingresar el codigo de registro")
+        else:
+            messagebox.showerror(title="Error", message="Llene sus datos")
+
+    def control1(self):
+        self.controlador.show_frame(Container)
+    
+    def control2(self):
+        self.controlador.show_frame(Login)
 
     def widgets(self):
         fondo = tk.Frame(self, bg="#C6D9E3")
@@ -127,8 +168,8 @@ class Registro(tk.Frame):
         self.key = ttk.Entry(frame1, show="*", font="arial 16 bold")
         self.key.place(x=80,y=470, width=240, height=40)
 
-        btn3 = tk.Button(frame1, text="Registrarse", font="arial 16 bold")
+        btn3 = tk.Button(frame1, text="Registrarse", font="arial 16 bold", command=self.registro)
         btn3.place(x=80, y=520 , width=240, height=40)
         
-        btn4 = tk.Button(frame1, text="Regresar", font="arial 16 bold")
+        btn4 = tk.Button(frame1, text="Regresar", font="arial 16 bold", command=self.control2)
         btn4.place(x=80, y=570 , width=240, height=40)
