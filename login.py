@@ -34,7 +34,6 @@ class Login(tk.Frame):
                     result = cursor.fetchall()
                     print("Resultado del login:", result)
 
-
                     if result:
                         self.control1()
                     else:
