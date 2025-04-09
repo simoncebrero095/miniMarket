@@ -38,7 +38,31 @@ class Inventario(tk.Frame):
         self.comboboxbuscar = ttk.Combobox(lblframe_buscar,font="arial 12")
         self.comboboxbuscar.place(x=5, y=5, width=260, height=40)
 
-    #======================================================================================================
+    #===================== =================================================================================
+        lblframe_seleccion = LabelFrame(self, text="Selección", font="arial 14 bold", bg="#C6D9E3")
+        lblframe_seleccion.place(x=10,y=95,width=280, height=190)
 
+        self.label1 = tk.Label(lblframe_seleccion, text="Articulo: ", font="Arial 14 bold", bg="#C6D9E3", wraplength=300)
+        self.label1.place(x=5,y=5)
 
+        self.label2 = tk.Label(lblframe_seleccion, text="Precio: ", font="Arial 14 bold", bg="#C6D9E3")
+        self.label2.place(x=5,y=40)
 
+        self.label3 = tk.Label(lblframe_seleccion, text="Costo: ", font="Arial 14 bold", bg="#C6D9E3")
+        self.label3.place(x=5,y=70)
+
+        self.label4 = tk.Label(lblframe_seleccion, text="Stock: ", font="Arial 14 bold", bg="#C6D9E3")
+        self.label4.place(x=5,y=100)
+
+        self.label5 = tk.Label(lblframe_seleccion, text="Estado: ", font="Arial 14 bold", bg="#C6D9E3")
+        self.label5.place(x=5,y=130)
+    #===================== =================================================================================
+        lblframe_botones = LabelFrame(self, bg="#C6D9E3", text="Opciones", font="arial 14 bold")
+        lblframe_botones.place(x=10, y=290, width=280, height=300)
+
+        btn1 = tk.Button(lblframe_botones, text="Agregar", font="Arial 14 bold")
+        btn1.place(x=20, y=20, width=180, height=40)
+
+        
+        btn2 = tk.Button(lblframe_botones, text="Editar", font="Arial 14 bold")
+        btn2.place(x=20, y=80, width=180, height=40)
