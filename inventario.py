@@ -1,12 +1,18 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
-
+import sys
+import os
 
 class Inventario(tk.Frame):
     def __init__(self, padre):
         super().__init__(padre)
         self.widgets()
+
+        self.image_folder = "fotos"
+        if not os.path.exists(self.image_folder):
+            os.makedirs(self.image_folder)
+
 
 
     def widgets(self):
@@ -66,3 +72,10 @@ class Inventario(tk.Frame):
         
         btn2 = tk.Button(lblframe_botones, text="Editar", font="Arial 14 bold")
         btn2.place(x=20, y=80, width=180, height=40)
+
+
+    def load_image(self):
+        file_path = filedialog.askopenfilename()
+        if file_path:
+            image = Image.open(file_path)
+            image = image.resize()
