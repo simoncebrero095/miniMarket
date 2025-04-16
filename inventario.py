@@ -1,6 +1,8 @@
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
+from PIL import Image, ImageTk
+
 import sys
 import os
 
@@ -66,7 +68,7 @@ class Inventario(tk.Frame):
         lblframe_botones = LabelFrame(self, bg="#C6D9E3", text="Opciones", font="arial 14 bold")
         lblframe_botones.place(x=10, y=290, width=280, height=300)
 
-        btn1 = tk.Button(lblframe_botones, text="Agregar", font="Arial 14 bold")
+        btn1 = tk.Button(lblframe_botones, text="Agregar", font="Arial 14 bold",command=self.agregar_articulo)
         btn1.place(x=20, y=20, width=180, height=40)
 
         
@@ -78,4 +80,32 @@ class Inventario(tk.Frame):
         file_path = filedialog.askopenfilename()
         if file_path:
             image = Image.open(file_path)
-            image = image.resize()
+            image = image.resize((200, 200)), Image.LANCZOS
+            image_name = os.path.basename(file_path)
+            image_save_path = os.path.join(self.imagen_folder,image_name)
+            image.save(image_save_path)
+
+
+            self.image_tk = ImageTk.PhotoImage(image)
+
+            self.product_image = self.image_tk
+            self.image_path = image_save_path
+
+            img_label = tk.Label(self.frameimg,image = self.image_tk)
+            img_label.place(x=0, y=0, width=200, height=200)
+    
+    def agregar_articulo(self):
+        top = tk.Toplevel(self)
+        top.title("Agregar Articulo")
+        top.geometry("700x400+200+50")
+        top.config(bg="#C6D9E3")
+        top.resizable(False,False)
+
+        top.transient(self.master)
+        top.grab_set()
+        top.focus_set()
+        top.lift()
+
+        tk.Label(top, text="Articulos", font="arial 12 bold", bg="#C6D9E3").place(x=20, y=80, height=25)
+        
+
