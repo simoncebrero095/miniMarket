@@ -32,7 +32,6 @@ class Login(tk.Frame):
                     cursor = conn.cursor()
                     cursor.execute(consulta, parametros)
                     result = cursor.fetchall()
-                    print("Resultado del login:", result)
 
                     if result:
                         self.control1()

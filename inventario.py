@@ -1,8 +1,8 @@
+import sqlite3
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 from PIL import Image, ImageTk
-
 import sys
 import os
 
@@ -14,8 +14,6 @@ class Inventario(tk.Frame):
         self.image_folder = "fotos"
         if not os.path.exists(self.image_folder):
             os.makedirs(self.image_folder)
-
-
 
     def widgets(self):
         #================================================================================================
@@ -80,9 +78,9 @@ class Inventario(tk.Frame):
         file_path = filedialog.askopenfilename()
         if file_path:
             image = Image.open(file_path)
-            image = image.resize((200, 200)), Image.LANCZOS
+            image = image.resize((200, 200), Image.LANCZOS)
             image_name = os.path.basename(file_path)
-            image_save_path = os.path.join(self.imagen_folder,image_name)
+            image_save_path = os.path.join(self.image_folder,image_name)
             image.save(image_save_path)
 
 
@@ -94,6 +92,12 @@ class Inventario(tk.Frame):
             img_label = tk.Label(self.frameimg,image = self.image_tk)
             img_label.place(x=0, y=0, width=200, height=200)
     
+    def articulos_combobox(self):
+        self.con = sqlite3.connect('database.db')
+        self.cun.execute("SELECT articulo FROM articulos")
+        self.articulos = [row[0] for row in self.cur.fetchall()]
+        self.comboboxbuscar['values'] = self.articulos
+
     def agregar_articulo(self):
         top = tk.Toplevel(self)
         top.title("Agregar Articulo")
@@ -106,6 +110,65 @@ class Inventario(tk.Frame):
         top.focus_set()
         top.lift()
 
-        tk.Label(top, text="Articulos", font="arial 12 bold", bg="#C6D9E3").place(x=20, y=80, height=25)
+        tk.Label(top, text="Articulos: ", font="arial 12 bold", bg="#C6D9E3").place(x=20, y=20,width=80, height=25)
+        entry_articulo = ttk.Entry(top, font="arual 12 bold").place(x=120, y=20, width=250, height=30)
+
+        tk.Label(top, text="Precio: ", font="arial 12 bold", bg="#C6D9E3").place(x=20, y=60,width=80, height=25)
+        entry_precio = ttk.Entry(top, font="arual 12 bold").place(x=120, y=60, width=250, height=30)
+
+        tk.Label(top, text="Costo: ", font="arial 12 bold", bg="#C6D9E3").place(x=20, y=100,width=80, height=25)
+        entry_costo = ttk.Entry(top, font="arual 12 bold").place(x=120, y=100, width=250, height=30)
+
+        tk.Label(top, text="Stock: ", font="arial 12 bold", bg="#C6D9E3").place(x=20, y=140,width=80, height=25)
+        entry_stock = ttk.Entry(top, font="arual 12 bold").place(x=120, y=140, width=250, height=30)
+
+        tk.Label(top, text="Estado: ", font="arial 12 bold", bg="#C6D9E3").place(x=20, y=180,width=80, height=25)
+        entry_estado = ttk.Entry(top, font="arual 12 bold").place(x=120, y=180, width=250, height=30)
+
+        self.frameimg = tk.Frame(top, bg="white", highlightbackground="gray", highlightthickness=1)
+        self.frameimg.place(x=440, y=30, width=200, height=200)
+
+        btnimage = tk.Button(top, text="Cargar imagen", font="arial 12 bold", command=self.load_image)
+        btnimage.place(x=470, y=260, width=150, height=40)
+
+        def guardar():
+            articulo = entry_articulo.get()
+            precio = entry_precio.get()
+            costo = entry_costo.get()
+            stock = entry_stock.get()
+            estado = entry_estado.get()
+
+            if not articulo or not precio or not costo or not stock or not estado:
+                messagebox.showerror("Error","Todos los campos deben ser completados")
+                return
+            
+            try:
+                precio = float(precio)
+                costo = float(costo)
+                stock = int(stock)
+            except ValueError:
+                messagebox.showerror("Error", "precio, costo y stock deben ser numeros validos")
+                return
+            
+            if hasattr(self, "image_path"):
+                image_path = self.image_path
+            else:
+                image_path = (r"fotos/default.png")
+            
+            try:
+                self.cur.execute("INSERT INTO (articulos, precio, costo, stock, estado, image_path) VALUES (?,?,?,?,?,?)",
+                                (articulo,precio,costo,stock,estado,image_path))
+                self.con.commit()
+                messagebox.showinfo("Exito","Articulo agregado correctamente")
+                top.destroy()
+            except sqlite3.Error as e:
+                print("Error al cargar el articulo:", e)
+                messagebox.showerror("Error","Error al agregar el articulo")
         
+        tk.Button(top, text= "Guardar", font = "arial 12 bold", command = guardar).place(x=50,y=260,width=150,height=40)
+        tk.Button(top, text= "Cancelar", font = "arial 12 bold", command =top.destroy).place(x=260,y=260,width=150,height=40)
+
+
+
+
 
